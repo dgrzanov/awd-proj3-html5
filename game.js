@@ -132,9 +132,10 @@ function generateAsteroids(numAsteroids) {
 // Funkcija za prikaz vremena u gornjem desnom kutu prozora
 function displayTimer(elapsedTime) {
   const timerElement = document.getElementById('timer');
-  const bestTimerElement = document.getElementById('best_timer');
+  const bestTimerElement = document.getElementById('record_timer');
   timerElement.textContent = 'Vrijeme: ' + formatTime(elapsedTime);
-  bestTimerElement.textContent = 'Najbolje Vrijeme: ' + BEST_TIME ? formatTime(BEST_TIME) : '00:00:000';
+  const bestTime = localStorage.getItem("best_time");
+  bestTimerElement.textContent = 'Najbolje Vrijeme: ' + (bestTime ? formatTime(Number(bestTime)) : '00:00:000');
 }
 
 // Funkcija za pretvaranje vremena iz sekundi u format (minute:sekunde.milisekunde)
@@ -200,13 +201,13 @@ function gameLoop() {
   if (collisionDetected) {
 			if (startTime) {
       const endTime = Date.now();
-      const elapsedTime = (endTime - startTime) / 1000; // Vrijeme u sekundama
+      const elapsedTime = (endTime - startTime);
       console.log('Kolizija se dogodila nakon ' + elapsedTime + ' sekundi.');
 		  console.log(formatTime(elapsedTime));
 
 		  // TODO spremiti u localStorage najbolje vrijeme
 		  const bestTime = localStorage.getItem("best_time");
-		  if (bestTime && bestTime > elapsedTime) {
+		  if ((bestTime && bestTime > elapsedTime) || !bestTime) {
 				localStorage.setItem("best_time", elapsedTime);
 			}
 
